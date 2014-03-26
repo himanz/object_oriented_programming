@@ -1,3 +1,4 @@
+# Determines which direction robot is facing
 def direction(lr, face)
 	if face == "N"
 		if lr == "L"
@@ -39,4 +40,18 @@ end
 # movement - if direction is N or S then add/subtract from y coordinate
 # movement - if direction is E or W then add/subtract from x coordinate
 
-puts direction("R", "N")
+# Determines whether or not to add or subtract from the x and y coordinate
+def moving(direction)
+	if direction == "N"
+		return 1
+	elsif direction == "S"
+		return -1
+	elsif direction == "E"
+		return 1
+	elsif direction == "W"
+		return -1
+	else
+		return "ERROR in moving"
+	end
+end
+
