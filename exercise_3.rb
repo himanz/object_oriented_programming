@@ -15,12 +15,11 @@ class Taxes
   	@items = items
   end
 
-  def sentence_split
+  def sentence_split(item_arr)
   	arr = []
-  	@items.each do |item|
+  	item_arr.each do |item|
       arr << item.split(" ")
   	end
-
   	return arr
   end
 
@@ -35,10 +34,13 @@ class Taxes
 
   def go
     arr2 = []
+    arr = @items
     arr = self.remove_at(self.sentence_split)
+    sentence_split(@items)
+    remove_at(@items)
     puts "\n" 
     arr.each { |x| arr2 << x.join(" ") }
-      
+    
     
     
     print arr2 
