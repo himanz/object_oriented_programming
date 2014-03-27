@@ -18,15 +18,6 @@ class Taxes
     return item_arr
   end
 
-  def go
-  	sentence_split(@items)
-  	remove_at(@items)
-  	tax_calc
-  	joining(@items)
-  	print @items
-  	
-  end
-  
   # Join the array together to create the product 
   def joining(item_arr)
   	arr2 = []
@@ -36,8 +27,8 @@ class Taxes
   
   # Calculate the tax rate
   def tax_calc
-  	 
   	basic = ["book", "chocolate", "chocolates", "pills"]
+  	
   	# Go through each sentence of word to find specific words to determine tax
   	@items.each do |sentence|
   		# To see if it is exempt from basic tax or not
@@ -46,10 +37,9 @@ class Taxes
   		
   		# Looks for imported for luxary tax
   		if sentence.include?("imported")
-  			
   			tax += 5
   		end
-      
+
       # Go through each keyword exempt from basic tax
       basic.each do |x|      	
   	    if sentence.include? x
@@ -64,10 +54,32 @@ class Taxes
 
       # Append the tax rates to each sentence 
       sentence << tax
-  	end
-
-  	
+  	end  
   end
+
+  def tax_sales
+  	taxes = []
+  	@items.each do |x|
+      tax = x.pop
+      if tax != 0
+        taxes << (x[-1].to_f * tax)/100 
+      end
+      
+    end
+    print taxes
+   # print taxes
+  end
+
+  def go
+  	sentence_split(@items)
+  	remove_at(@items)
+  	tax_calc
+  	#print @items
+  	tax_sales
+  	#joining(@items)
+  	#print @items
+  end
+  
 end
 
 input1 = Taxes.new(["1 book at 12.49", "1 music CD at 14.99", 
