@@ -11,20 +11,12 @@ class Taxes
   end
 
   def exempt(sentence)
-  	exempt_list = ["book", "chocolate", "chocolates", "pills"]
-    #if sentence.each
+  	
   end
   
   def tax_rate
   end
 
-end
-
-class Output
-	def initialize(items, taxes)
-		@items = items
-		@taxes = taxes
-	end
 end
 
 class Manipulation
@@ -51,6 +43,16 @@ class Manipulation
   	return @sentence.each {|x| x.delete("at")}
   end
 
+end
+
+class Output
+	def create_receipt(receipt)
+		@receipt = Manipulation.new(receipt)
+	end
+
+	def display_tax(tax_info)
+		@tax_info = Taxes.new(tax_info)
+	end
 end
 
 jon = Manipulation.new(["1 book at 12.49",
