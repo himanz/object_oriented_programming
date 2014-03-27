@@ -1,82 +1,94 @@
-# Determines which direction robot is facing
-def direction(lr, face)
-  turn = {"L" => -1, "R" => 1}
-  dir = ["N","E" ,"S" ,"W"]
-
-  # Checks to see if condition met to go past index
-  if lr == "L" && face == "N"
-  	return "W"
-  elsif lr == "R" && face == "W"
-  	return "N"
-  else
-  	# Navigate the dir array based on inputs
-  	return dir[dir.index(face)+turn[lr]]
-  end  
-end
-
-# Determines whether or not to add or subtract from the x and y coordinate
-def moving(direction)
-  value = { "N" => 1,
-  	        "E" => 1,
-  	        "S" => -1,
-  	        "W" => -1
-  }
-	return value[direction]
-end
-
-# Split user commands into single letter commands
-def command_split(command)
-  return command.split('')
-end
-
-# Gets user commands
-def user_command
-	puts "Please enter commands on one line (example - LMLMLMLMM )"
-	return gets.chomp
-end
-
-# Defines max grid from user input
-def grid
-	puts "Enter a max size for x co-ordinate"
-	x = gets.chomp.to_i
-	puts "Enter a max size for y co-ordinate"
-	y = gets.chomp.to_i
-  puts "Your grid is [#{x},#{y}]"
-	return [x, y]
-end
-
-# Start point on grid from user input
-def start
-	puts "Enter starting x co-ordinate"
-	x = gets.chomp.to_i
-	puts "Enter starting y co-ordinate"
-	y = gets.chomp.to_i
-	puts "Enter which direction facing"
-	dir = gets.chomp
-	return [x, y, dir]
-end
-
-grid
-
-x, y, face = start
-
-command = user_command
-
-indiv_command = command_split(command)
-
-indiv_command.each do |action|
-	if action == "L" or action == "R"
-		face = direction(action, face)
-	elsif action == "M"
-		if face == "N" or face == "S"
-			y += moving(face)
-		elsif face == "E" or face == "W"
-			x += moving(face)
-		end
+class Robot
+	def initialize(x, y, face, command, max_x, max_y)
+		@x, @y, @face, @command, @max_x, @max_y = x, y, face, command, max_x, max_y
+		$out_of_bounds = false
 	end
+  
+  # Split the input command to 1 commands each
+  def command_split
+    return @command.split('')
+  end
+  
+  # Determine which direction to face
+  def direction(lr)
+	  turn = {"L" => -1, "R" => 1}
+	  dir = ["N","E" ,"S" ,"W"]
+
+	  # Checks to see if condition met to go past index
+	  if lr == "L" && @face == "N"
+	  	return "W"
+	  elsif lr == "R" && @face == "W"
+	  	return "N"
+	  else
+	  	# Navigate the dir array based on inputs
+	  	return dir[dir.index(@face)+turn[lr]]
+	  end  
+	end
+  
+  # Determine if moving is in a positive direction or negative
+  def moving(direction)
+	  value = { "N" => 1,
+	  	        "E" => 1,
+	  	        "S" => -1,
+	  	        "W" => -1
+	  }
+		return value[direction]
+	end
+  
+  # Rover moving logic
+  def navigating
+  	indiv_command = command_split
+
+		indiv_command.each do |action|
+			# Logic to determine out of bounds
+      if @x < 0 || @y < 0 || @x > @max_x || @y > @max_y
+        $out_of_bounds = true
+        break        
+      end 
+
+			if action == "L" or action == "R"
+				@face = direction(action)
+			elsif action == "M"
+				# Determine whether or not x or y axis is affected
+				if @face == "N" or @face == "S"
+					@y += moving(@face)
+				elsif @face == "E" or @face == "W"
+					@x += moving(@face)
+				end
+			end
+		end
+  end
+  
+  # Return x, y and direction values
+  def result
+  	return "#{@x} #{@y} #{@face}"
+  end
+
+  # Rover is going
+  def go_time
+  	self.navigating
+  	if $out_of_bounds == false
+		  print self.result
+		else
+			puts "OUT OF GRID BOUNDARIES, FAILBOT"
+		end
+    puts "\n"
+    puts "----------------------------"
+    puts "\n"
+  end
 end
 
-print "result is #{x} #{y} #{face}\n"
+# Max grid size
+def grid(x, y)
+	return x, y
+end
 
+# Checks if rover goes out of bounds
+$out_of_bounds = false
+grid_size_x, grid_size_y = grid(5, 5)
 
+doug = Robot.new(1, 2, "N", "LMLMLMLMM", grid_size_x, grid_size_y)
+doug.go_time
 
+amy = Robot.new(3, 3, "E", "MMRMMRMRRM", grid_size_x, grid_size_y)
+amy.go_time
