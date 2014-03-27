@@ -45,3 +45,38 @@ def grid
 	return [x, y]
 end
 
+# Start point on grid from user input
+def start
+	puts "Enter starting x co-ordinate"
+	x = gets.chomp.to_i
+	puts "Enter starting y co-ordinate"
+	y = gets.chomp.to_i
+	puts "Enter which direction facing"
+	dir = gets.chomp
+	return [x, y, dir]
+end
+
+grid
+
+x, y, face = start
+
+command = user_command
+
+indiv_command = command_split(command)
+
+indiv_command.each do |action|
+	if action == "L" or action == "R"
+		face = direction(action, face)
+	elsif action == "M"
+		if face == "N" or face == "S"
+			y += moving(face)
+		elsif face == "E" or face == "W"
+			x += moving(face)
+		end
+	end
+end
+
+print "result is #{x} #{y} #{face}\n"
+
+
+
