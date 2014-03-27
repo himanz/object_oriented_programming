@@ -79,6 +79,7 @@ class Taxes
     end
     
     puts @nu
+
   end
 
   def go
@@ -105,7 +106,7 @@ class Taxes
   		#return (num + (10.0 - last_digit) / 100).round(2)
       @nu = (num + (10.0 - last_digit) / 100).round(2)
       return @nu
-  	elsif last_digit && last_digit <= 4
+  	elsif last_digit >=1 && last_digit <= 4
   		#return (num + (5.0 - last_digit) / 100).round(2)
       @nu = (num + (5.0 - last_digit) / 100).round(2)
       return @nu
