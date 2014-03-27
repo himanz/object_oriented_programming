@@ -85,10 +85,13 @@ end
 
 # Checks if rover goes out of bounds
 $out_of_bounds = false
+
 grid_size_x, grid_size_y = grid(5, 5)
 
+# Rover 1
 doug = Robot.new(1, 2, "N", "LMLMLMLMM", grid_size_x, grid_size_y)
 doug.go_time
 
+# Rover 2
 amy = Robot.new(3, 3, "E", "MMRMMRMRRM", grid_size_x, grid_size_y)
 amy.go_time
