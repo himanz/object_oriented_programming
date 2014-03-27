@@ -37,6 +37,7 @@ class Taxes
   		
   		# Looks for imported for luxary tax
   		if sentence.include?("imported")
+  			
   			tax += 5
   		end
 
@@ -58,7 +59,10 @@ class Taxes
   end
 
   def tax_sales
+    @nu = 0
   	taxes = []
+  	tax_sum = 0
+  	tax_arr = []
   	@items.each do |x|
       tax = x.pop
       if tax != 0
@@ -66,27 +70,63 @@ class Taxes
       end
       
     end
-    print taxes
-   # print taxes
+    taxes.each {|y| tax_sum += y.round(2) }
+    tax_sum.round(2)
+    @nu = tax_sum
+
+    if (tax_sum.to_s)[-3] == "."
+      round_tax(tax_sum)
+    end
+    
+    puts @nu
   end
 
   def go
+    indiv_price = [] 
+    receipt = {}
+    hold = ""
   	sentence_split(@items)
   	remove_at(@items)
   	tax_calc
-  	#print @items
   	tax_sales
+   
+    @items.each do |x|
+      indiv_price << x.pop
+    end
+    
   	#joining(@items)
   	#print @items
   end
   
+  def round_tax(num)
+    @nu = num
+  	last_digit = (num.to_s[-1]).to_i
+  	if last_digit >= 6 && last_digit <= 9
+  		#return (num + (10.0 - last_digit) / 100).round(2)
+      @nu = (num + (10.0 - last_digit) / 100).round(2)
+      return @nu
+  	elsif last_digit && last_digit <= 4
+  		#return (num + (5.0 - last_digit) / 100).round(2)
+      @nu = (num + (5.0 - last_digit) / 100).round(2)
+      return @nu
+  	end
+  end
+
 end
 
 input1 = Taxes.new(["1 book at 12.49", "1 music CD at 14.99", 
 	                  "1 chocolate bar at 0.85"])
-input2 = Taxes.new(["1 imported bottle of perfume at 27.99", "1 bottle of perfume at 18.99",
+
+input2 = Taxes.new(["1 imported box of chocolates at 10.00", 
+	                  "1 imported bottle of perfume at 47.50"])
+	
+
+input3 = Taxes.new(["1 imported bottle of perfume at 27.99", 
+	                  "1 bottle of perfume at 18.99",
                     "1 packet of headache pills at 9.75", 
                     "1 box of imported chocolates at 11.25"])
 
+
 input1.go
 input2.go
+input3.go
