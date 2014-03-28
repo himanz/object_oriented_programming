@@ -53,11 +53,22 @@ class Output
 	def display_tax(tax_info)
 		@tax_info = Taxes.new(tax_info)
 	end
+
+  def print_r
+  	puts @receipt
+  end
 end
 
-jon = Manipulation.new(["1 book at 12.49",
+#jon = Manipulation.new(["1 book at 12.49",
+#	               "1 music CD at 14.99",
+#	               "1 chocolate bar at 0.85"])
+#jon.sentence_split
+#jon.remove_at
+#jon.joining
+
+cho = Output.new
+cho.create_receipt(["1 book at 12.49",
 	               "1 music CD at 14.99",
 	               "1 chocolate bar at 0.85"])
-jon.sentence_split
-jon.remove_at
-jon.joining
+
+print cho.print_r
