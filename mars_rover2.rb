@@ -1,25 +1,32 @@
 class Rover
 
-	def initialize(x,y,direction)
-		@x = x
-		@y = y
-		@direction = direction
-	end
+  DIRECTIONS = %w(N E S W)
 
-	def move
-		if @direction == "N"
+  NORTH = 0
+  EAST = 1
+  SOUTH = 2
+  WEST = 3
+
+  def initialize(x,y,direction)
+    @x = x
+    @y = y
+    @direction = direction
+  end
+
+  def move
+    if @direction == "N"
       @y += 1
-    elsif @direction == "E"
+    elsif @direction == "E" 
       @x += 1
     elsif @direction == "S"
       @y -= 1
     elsif @direction == "W"
-      @y -= 1
+      @x -= 1
     end
-	end
-  
+  end
+
   def turn_right
-  	if @direction == "N"
+    if @direction == "N"
       @direction = "E"
     elsif @direction == "E"
       @direction = "S"
@@ -31,10 +38,10 @@ class Rover
   end
 
   def turn_left
-  	if @direction == "N"
+    if @direction == "N"
       @direction = "W"
     elsif @direction == "W"
-      @directon = "S"
+      @direction = "S"
     elsif @direction == "S"
       @direction = "E"
     elsif @direction == "E"
@@ -42,9 +49,10 @@ class Rover
     end
   end
 
-	def to_s
-		"#{@x},#{@y},#{@direction}"
-	end
+  def to_s
+    "#{@x} #{@y} #{@direction}"
+  end
+
 end
 
 class Commander
@@ -54,12 +62,11 @@ class Commander
 
   def create_rover(starting_point)
     coords = starting_point.split(" ")
-    @rover = Rover.new(coords[X], coords[Y], coords[DIRECTION])
+    @rover = Rover.new(coords[X].to_i, coords[Y].to_i, coords[DIRECTION])
   end
 
   def move_rover(move_command)
     move_command.split("").each do |c|
-
       if c == "L"
         @rover.turn_left
       elsif c == "R"
@@ -70,12 +77,17 @@ class Commander
     end
   end
 
-  def result
-  	@rover.to_s
+  def final_location
+    puts @rover.to_s
   end
 end
 
 command = Commander.new
 command.create_rover("1 2 N")
 command.move_rover("LMLMLMLMM")
-command.result
+command.final_location
+
+command2 = Commander.new
+command2.create_rover("3 3 E")
+command2.move_rover("MMRMMRMRRM")
+command2.final_location
