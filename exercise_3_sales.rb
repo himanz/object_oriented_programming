@@ -20,7 +20,6 @@ class Taxes
 end
 
 class Manipulation
-  
   def initialize(sentence)
   	@sentence = sentence
   end

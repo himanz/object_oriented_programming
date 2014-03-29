@@ -1,4 +1,4 @@
-class Robot
+ 	class Robot
 	def initialize(x, y, face, command, max_x, max_y)
 		@x, @y, @face, @command, @max_x, @max_y = x, y, face, command, max_x, max_y
 		$out_of_bounds = false
