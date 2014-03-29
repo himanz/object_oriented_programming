@@ -7,19 +7,19 @@ class Tax
   end
 
   def calc_tax(tax_rate)
-    raw_value = (@unit_cost * tax_rate).round(2)
-    rounded_value = (raw_value * 20).ceil / 20.0
-    @unit_tax = rounded_value
+    unit_and_tax = (@unit_cost * tax_rate).round(2)
+    price_round = (unit_and_tax * 10).ceil / 10.0
+    @unit_tax = price_round
     @@total_tax += @unit_tax
-    return rounded_value
+    return price_round
   end
 
   def tax_for_unit
-    @unit_tax
+    @unit_tax.round(2)
   end
 
   def tax_total
-    @@total_tax
+    @@total_tax.round(2)
   end
 end
 
@@ -28,9 +28,6 @@ class Manipulation
     @receipt = receipt
   end
   def split_to_single
-    #split = []
-    #input.each {|x| split << x.split(" ")}
-    #split
     @receipt.split(" ")
   end
 
@@ -62,9 +59,20 @@ class Manipulation
     return tax
   end
 
+  def add_zero(input)
+    if input[-3] != "."
+       result = input + "0"
+       return result
+    end
+    return input
+  end
 end
 
 class Command
+  def initialize
+    @editted_receipt = []
+    @total = 0
+  end
   def run
     done = false
     while !done
@@ -81,23 +89,20 @@ class Command
         at_removed = @manip.remove_at(split_sentence)
         luxury_rate = @manip.luxury(at_removed)
         basic_rate = @manip.basic(at_removed)
-        tax_rate = (luxury_rate + basic_rate).round(2)
-        puts "lux is #{luxury_rate}"
-        puts "basic is #{basic_rate}"
-        puts "tax rate is #{tax_rate}"
-        puts "-------------"
+        tax_rate = (luxury_rate + basic_rate)
         unit_tax = @taxes.calc_tax(tax_rate)
-        tax_for_unit = @taxes.tax_for_unit
-        puts "Rounded unit cost #{unit_tax}"
-        puts "tax for unit cost #{tax_for_unit}"
-        #whole_sentence = @manip.join_words(at_removed)
-        puts price
-        puts "\n"
-        puts @taxes.tax_total
+        tax_for_unit = (@taxes.tax_for_unit)
+        at_removed.pop
+        whole_sentence = @manip.join_words(at_removed)
+        @total += (price + tax_for_unit)
+        price_string = (price + tax_for_unit).round(2).to_s
+        @editted_receipt << whole_sentence + ":" + " #{@manip.add_zero(price_string)}"
       end
     end
-    #@manip = Manipulation.new
-    
+    puts "\e[H\e[2J"
+    puts @editted_receipt
+    puts "Sales Taxes: #{@manip.add_zero(@taxes.tax_total.to_s)}"
+    puts "Total: #{@manip.add_zero(@total.round(2).to_s)}"
   end
 end
 
