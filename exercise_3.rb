@@ -7,32 +7,11 @@ class Tax
   end
 
   def calc_tax(tax_rate)
-    tax = (@unit_cost * tax_rate).round(2)
-    num = tax + @unit_cost
-    rounded_unit_price = 0
-    last_digit = (num.to_s[-1]).to_i
-    puts "last digit is #{last_digit}"
-    if last_digit >= 6 && last_digit <= 9
-      #return (num + (10.0 - last_digit) / 100).round(2)
-      rounded_unit_price = (num + (10.0 - last_digit) / 100).round(2)
-      @unit_tax = (rounded_unit_price - @unit_cost).round(2)
-      @@total_tax += @unit_tax
-      return rounded_unit_price
-    elsif last_digit >=1 && last_digit <= 4
-      #return (num + (5.0 - last_digit) / 100).round(2)
-      rounded_unit_price = (num + (5.0 - last_digit) / 100).round(2)
-      @unit_tax = (rounded_unit_price - @unit_cost).round(2)
-      @@total_tax += @unit_tax
-      return rounded_unit_price
-    else
-      rounded_unit_price = (num / 100).round(2)
-      @unit_tax = (rounded_unit_price - @unit_cost).round(2)
-      @@total_tax += @unit_tax
-      return rounded_unit_price
-    end
-    #rounded_tax = (tax * 20).ceil / 20
-    #@@total_tax += (@unit_cost * tax_rate) 
-    #return rounded_tax
+    raw_value = (@unit_cost * tax_rate).round(2)
+    rounded_value = (raw_value * 20).ceil / 20.0
+    @unit_tax = rounded_value
+    @@total_tax += @unit_tax
+    return rounded_value
   end
 
   def tax_for_unit
