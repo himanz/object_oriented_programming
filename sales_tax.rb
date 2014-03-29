@@ -1,4 +1,4 @@
-class Taxes
+  class Taxes
   def initialize(items)
   	@items = items
   end
