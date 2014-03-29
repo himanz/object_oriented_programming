@@ -8,7 +8,7 @@ class Tax
 
   def calc_tax(tax_rate)
     unit_and_tax = (@unit_cost * tax_rate).round(2)
-    price_round = (unit_and_tax * 10).ceil / 10.0
+    price_round = (unit_and_tax * 20).ceil / 20.0
     @unit_tax = price_round
     @@total_tax += @unit_tax
     return price_round
