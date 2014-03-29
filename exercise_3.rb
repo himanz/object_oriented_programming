@@ -1,4 +1,18 @@
 class Tax
+  @@total_tax = 0
+
+  def initialize(unit_cost)
+    @unit_cost = unit_cost
+  end
+
+  def calc_tax(tax_rate)
+    @@total_tax += (@unit_cost * tax_rate) / 100 
+    return (@unit_cost * tax_rate) / 100
+  end
+
+  def tax_total
+    @@total_tax
+  end
 end
 
 class Manipulation
@@ -60,19 +74,19 @@ class Command
         # Setting up values to use do manipulation
         split_sentence = @manip.split_to_single
         price = split_sentence[-1].to_f
+        @taxes = Tax.new(price)
         at_removed = @manip.remove_at(split_sentence)
     
         luxury_rate = @manip.luxury(at_removed)
         basic_rate = @manip.basic(at_removed)
+        tax_rate = luxury_rate + basic_rate
         puts "-------------"
-        puts "luxury tax is #{luxury_rate}"
-        puts "--------------"
-        puts "basic tax is #{basic_rate}"
-        puts "--------------"
+        unit_tax = @taxes.calc_tax(tax_rate)
         #whole_sentence = @manip.join_words(at_removed)
         puts price
         puts "\n"
         print at_removed
+        puts @taxes.tax_total
       end
     end
     #@manip = Manipulation.new
