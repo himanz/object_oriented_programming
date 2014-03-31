@@ -23,9 +23,25 @@ class Commands
 	Y = 1
 	D = 2
 	def start
-		puts "Enter coordinates and direction like so: 1 3 N"
+		puts "Enter coordinates and direction like so: 1 2 N"
 		coords = gets.chomp.split(" ")
 		@commands = Rover.new(coords[X].to_i, coords[Y].to_i, coords[D]) 
+	end
+
+	def command
+		puts "Enter Commands for the rover like so: LMLMLMLMM"
+		user_command = gets.chomp.split("")
+		@user_command.each do |input|
+			if input == "M"
+				@commands.move
+			elsif input == "L"
+				@commands.turn_left
+			elsif input == "R"
+				@commands.turn_right
+			else
+				puts "#{input} is unknown command"
+			end
+		end
 	end
 end
 
@@ -34,3 +50,4 @@ end
 
 jon = Commands.new
 jon.start
+jon.command
