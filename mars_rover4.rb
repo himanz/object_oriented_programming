@@ -1,6 +1,7 @@
 class Rover
   DIRECTIONS = %w(N E S W)
-
+  attr_reader :x, :y
+  
   def initialize(x, y, d)
   	@x = x
   	@y = y
@@ -16,7 +17,7 @@ class Rover
 			@y -= 1
 	  elsif @d == "W"
 	  	@x -= 1
-	  end 
+	  end
 	end
 
 	def turn_left
@@ -37,7 +38,11 @@ class Commands
 	Y = 1
 	D = 2
 	def start
-		puts "Enter coordinates and direction like so: 1 2 N"
+		puts "Enter max X axis for grid"
+		@xmax = gets.chomp.to_i
+		puts "Enter max Y axis for grid"
+		@ymax = gets.chomp.to_i
+		puts "Enter coordinates and direction for rover to start like so: 1 2 N"
 		coords = gets.chomp.split(" ")
 		@commands = Rover.new(coords[X].to_i, coords[Y].to_i, coords[D])
 	end
@@ -48,6 +53,13 @@ class Commands
 		user_command.each do |input|
 			if input == "M"
 				@commands.move
+		 		if @commands.x < 0 || @commands.x > @xmax
+	   	    puts "OUT OF BOUNDS"
+	   	    return
+	      elsif @commands.y < 0 || @commands.y > @ymax
+	   	    puts "OUT OF BOUNDS"
+	   	    return
+	      end
 	    elsif input == "L"
 				@commands.turn_left
 			elsif input == "R"
