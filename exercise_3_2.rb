@@ -89,8 +89,9 @@ class User
 			# split the array into single words
 			@listreceipt.split_array(@manip.split_sentence(item))
       # remove at word if it is in the array
-      @listreceipt.without_at_array(@manip.remove_at(@listreceipt.display_split_array))
-      
+      @listreceipt.without_at_array(@manip.remove_at(@listreceipt.return_split_array))
+      # popping price from array and turning it from string to float
+      @listreceipt.price(@manip.get_price(@listreceipt.return_without_at))
 		end
 	end
 
