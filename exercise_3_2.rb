@@ -1,5 +1,9 @@
 class Price
-	def unit_tax
+  @@total_tax = 0
+  @@price_and_tax = 0
+
+	def unit_tax#(price)
+    
 	end
 
 	def price_unit_with_tax
@@ -13,6 +17,21 @@ class Price
 
   def total_price_with_tax
   end
+end
+
+class Tax
+	def luxury_tax(array)
+		print array
+		array.each do |word|
+			if word == "imported"
+				return 0.05
+			end
+		end
+		return 0
+	end
+
+	def basic_tax
+	end
 end
 
 class Manipulation
@@ -79,6 +98,7 @@ class User
 	def run
 		@listreceipt = ListReceipt.new
 		@manip = Manipulation.new
+		@tax = Tax.new
 		#@receipt = []
 		@done = false
 		#@word = ""
@@ -92,6 +112,9 @@ class User
       @listreceipt.without_at_array(@manip.remove_at(@listreceipt.return_split_array))
       # popping price from array and turning it from string to float
       @listreceipt.price(@manip.get_price(@listreceipt.return_without_at))
+      # got price, now can do manipulation
+      # find tax rate
+      @tax.luxury_tax(@listreceipt.return_without_at)
 		end
 	end
 
