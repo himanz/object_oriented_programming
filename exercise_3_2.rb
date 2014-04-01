@@ -21,16 +21,36 @@ end
 
 class Tax
 	def luxury_tax(array)
-		print array
 		array.each do |word|
 			if word == "imported"
-				return 0.05
+				@lux_tax = 0.05
+				return
 			end
 		end
-		return 0
+		@lux_tax = 0
 	end
 
-	def basic_tax
+	def basic_tax(array)
+		exempt = ["book", "chocolate", "chocolates", "pills"]
+		exempt.each do |word|
+      if array.include?(word)
+      	@bas_tax = 0
+      	return
+      end
+    end
+    @bas_tax = 0.1
+	end
+
+	def lux_tax
+		return @lux_tax
+	end
+
+	def bas_tax
+		return @bas_tax
+	end
+
+	def total_tax
+		return @lux_tax + @bas_tax
 	end
 end
 
@@ -115,6 +135,8 @@ class User
       # got price, now can do manipulation
       # find tax rate
       @tax.luxury_tax(@listreceipt.return_without_at)
+      @tax.basic_tax(@listreceipt.return_without_at)
+      puts @tax.total_tax
 		end
 	end
 
