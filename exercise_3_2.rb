@@ -1,3 +1,4 @@
+#work on line 184
 class Price
   @@total_tax = 0
   @@price_and_tax = 0
@@ -17,6 +18,10 @@ class Price
 
   def return_unit_tax
   	return @unit_tax
+  end
+
+  def return_price_add_tax
+  	return @price_with_tax
   end
 
 	def total_tax
@@ -73,10 +78,10 @@ class Manipulation
 		return sentence.delete_if {|x| x == "at"}
 	end
 
-	def join_sentence
-	end
-
-	def display_formatted_sentence
+	def join_sentence(sentence, price)
+		join = sentence.join(" ")
+		join = join + ": " + "#{price}"
+		return join
 	end
 
 	def get_price(sentence)
@@ -85,8 +90,10 @@ class Manipulation
 end	
 
 class ListReceipt
+	@@formatted_sentence = []
   def initialize
   	@sentence_array = []
+  	
   	#@manip = Manipulation.new
   end
 	
@@ -121,6 +128,28 @@ class ListReceipt
   def return_price
   	return @price
   end
+
+  def joined_sentence(input)
+  	@joined_sentence = input
+  end
+
+  def return_joined_sentence
+  	return @joined_sentence
+  end
+
+  def add_formatted_sentence(sentence)
+    @@formatted_sentence << sentence
+  end
+
+  def return_formatted_sentence(price, sales_tax, total)
+  	@@formatted_sentence.each {|x| puts "#{x}: #{price}"}
+  	puts "Sales Taxes: #{sales_tax.round(2)}"
+		puts "Total: #{total.round(2)}"
+  end
+
+  def hello
+  	print @@formatted_sentence
+  end
 end
 
 class User
@@ -147,9 +176,20 @@ class User
       @tax.luxury_tax(@listreceipt.return_without_at)
       @tax.basic_tax(@listreceipt.return_without_at)
       #@tax.total_tax
+      # calc tax on each unit
       @price.unit_tax(@listreceipt.return_price, @tax.total_tax)
+      # calc price added with tax
       @price.price_add_tax(@listreceipt.return_price, @price.return_unit_tax)
+      # join the array to create sentence
+
+      #work on line 184
+      @listreceipt.joined_sentence(@manip.join_sentence(@listreceipt.return_split_array,price.return_price_add_tax))
+      @listreceipt.add_formatted_sentence(@listreceipt.return_joined_sentence) 
+
 		end
+		#@manip.display_formatted_sentence(@listreceipt.return_joined_sentence, @price.return_price_add_tax, @price.total_tax, @price.total_price_with_tax)
+		@listreceipt.return_formatted_sentence(@price.return_price_add_tax, @price.total_tax, @price.total_price_with_tax)
+    
 	end
 
 	def user_input
