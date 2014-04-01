@@ -17,7 +17,8 @@ end
 
 class Manipulation
 	def split_sentence(sentence)
-		@splitted = sentence.split(" ")
+		splitted = sentence.split(" ")
+		return splitted
 	end
 
 	def remove_at(sentence)
@@ -30,26 +31,68 @@ class Manipulation
 	def display_formatted_sentence
 	end
 
-	def get_price
+	def get_price(sentence)
+		return sentence.pop
 	end
 end	
 
+class ListReceipt
+  def initialize
+  	@sentence_array = []
+  	#@manip = Manipulation.new
+  end
+	
+	def add_new(input)
+		@sentence_array << input
+	end
+  
+  def sentence_array
+  	@sentence_array
+  end
+
+  def split_array(input)
+    @split = input
+  end
+
+  def without_at_array(input)
+  	@without_at = input
+  end
+
+  def return_split_array
+  	return @split
+  end
+
+  def return_without_at
+  	return @without_at
+  end
+
+  def price(input)
+  	@price = input.to_f
+  end
+
+  def return_price
+  	return @price
+  end
+end
+
 class User
 	def run
+		@listreceipt = ListReceipt.new
 		@manip = Manipulation.new
-		@receipt = []
+		#@receipt = []
 		@done = false
-		@word = ""
+		#@word = ""
 		while !@done
 			user_input
 		end
-		@receipt.each do |item|
-      @word = split_the_sentence(item)
-      @word = remove_at(@word)
-      print @word
+		@listreceipt.sentence_array.each do |item|
+			# split the array into single words
+			@listreceipt.split_array(@manip.split_sentence(item))
+      # remove at word if it is in the array
+      @listreceipt.without_at_array(@manip.remove_at(@listreceipt.display_split_array))
+      
 		end
 	end
-
 
 	def user_input
 		puts "Enter a sentence (type EXIT to finish)"
@@ -57,7 +100,8 @@ class User
 			if input == "EXIT"
 				@done = true
 			else
-				@receipt << input
+				@listreceipt.add_new(input)
+				#@receipt << input
 			end
 
 	end
