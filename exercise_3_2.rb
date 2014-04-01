@@ -2,8 +2,8 @@ class Price
   @@total_tax = 0
   @@price_and_tax = 0
 
-	def unit_tax#(price)
-    
+	def unit_tax(price, tax)
+    @unit_tax = (((price * tax * 20.0).ceil)/20.0).round(2) 
 	end
 
 	def price_unit_with_tax
@@ -119,6 +119,7 @@ class User
 		@listreceipt = ListReceipt.new
 		@manip = Manipulation.new
 		@tax = Tax.new
+		@price = Price.new
 		#@receipt = []
 		@done = false
 		#@word = ""
@@ -136,7 +137,8 @@ class User
       # find tax rate
       @tax.luxury_tax(@listreceipt.return_without_at)
       @tax.basic_tax(@listreceipt.return_without_at)
-      puts @tax.total_tax
+      #@tax.total_tax
+      @price.unit_tax(@listreceipt.return_price, @tax.total_tax)
 		end
 	end
 
