@@ -3,19 +3,28 @@ class Price
   @@price_and_tax = 0
 
 	def unit_tax(price, tax)
-    @unit_tax = (((price * tax * 20.0).ceil)/20.0).round(2) 
+    @unit_tax = (((price * tax * 20.0).ceil)/20.0).round(2)
+    @@total_tax += @unit_tax 
 	end
 
-	def price_unit_with_tax
+	def price_add_tax(price, tax)
+		@price_with_tax = (price + tax).round(2)
+    @@price_and_tax += @price_with_tax
 	end
 
 	def total_price
 	end
 
+  def return_unit_tax
+  	return @unit_tax
+  end
+
 	def total_tax
+		return @@total_tax
   end
 
   def total_price_with_tax
+  	return @@price_and_tax
   end
 end
 
@@ -139,6 +148,7 @@ class User
       @tax.basic_tax(@listreceipt.return_without_at)
       #@tax.total_tax
       @price.unit_tax(@listreceipt.return_price, @tax.total_tax)
+      @price.price_add_tax(@listreceipt.return_price, @price.return_unit_tax)
 		end
 	end
 
