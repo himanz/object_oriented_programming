@@ -93,8 +93,6 @@ class ListReceipt
 	@@formatted_sentence = []
   def initialize
   	@sentence_array = []
-  	
-  	#@manip = Manipulation.new
   end
 	
 	def add_new(input)
@@ -126,11 +124,12 @@ class ListReceipt
   end
 
   def return_price
-  	return @price
+  	@price
   end
 
   def joined_sentence(input)
   	@joined_sentence = input
+  	add_formatted_sentence(@joined_sentence)
   end
 
   def return_joined_sentence
@@ -142,7 +141,7 @@ class ListReceipt
   end
 
   def return_formatted_sentence(price, sales_tax, total)
-  	@@formatted_sentence.each {|x| puts "#{x}: #{price}"}
+  	@@formatted_sentence.each {|x| puts "#{x}"}
   	puts "Sales Taxes: #{sales_tax.round(2)}"
 		puts "Total: #{total.round(2)}"
   end
@@ -158,9 +157,7 @@ class User
 		@manip = Manipulation.new
 		@tax = Tax.new
 		@price = Price.new
-		#@receipt = []
 		@done = false
-		#@word = ""
 		while !@done
 			user_input
 		end
@@ -175,19 +172,13 @@ class User
       # find tax rate
       @tax.luxury_tax(@listreceipt.return_without_at)
       @tax.basic_tax(@listreceipt.return_without_at)
-      #@tax.total_tax
       # calc tax on each unit
       @price.unit_tax(@listreceipt.return_price, @tax.total_tax)
       # calc price added with tax
       @price.price_add_tax(@listreceipt.return_price, @price.return_unit_tax)
       # join the array to create sentence
-
-      #work on line 184
-      @listreceipt.joined_sentence(@manip.join_sentence(@listreceipt.return_split_array,price.return_price_add_tax))
-      @listreceipt.add_formatted_sentence(@listreceipt.return_joined_sentence) 
-
+      @listreceipt.joined_sentence(@manip.join_sentence(@listreceipt.return_without_at,@price.return_price_add_tax))
 		end
-		#@manip.display_formatted_sentence(@listreceipt.return_joined_sentence, @price.return_price_add_tax, @price.total_tax, @price.total_price_with_tax)
 		@listreceipt.return_formatted_sentence(@price.return_price_add_tax, @price.total_tax, @price.total_price_with_tax)
     
 	end
@@ -199,7 +190,6 @@ class User
 				@done = true
 			else
 				@listreceipt.add_new(input)
-				#@receipt << input
 			end
 
 	end
